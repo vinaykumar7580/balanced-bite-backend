@@ -1,5 +1,5 @@
 const express=require("express")
-const {userModel}=require("../model/users.model")
+const {UserModel}=require("../model/users.model")
 
 const userRouter=express.Router()
 const bcrypt=require("bcrypt")
@@ -22,7 +22,7 @@ userRouter.post("/register",async(req,res)=>{
             if(err){
                 res.status(400).json({error:err.message})
             }else{
-                const user=new userModel({name,email,pass:hash,age,nation})
+                const user=new UserModel({name,email,pass:hash,age,nation})
                 dataBase.push(user)
                 await user.save()
                 res.status(200).json({msg:"new user added",updatedUser:req.body})
@@ -40,7 +40,7 @@ userRouter.post("/register",async(req,res)=>{
 userRouter.post("/login",async(req,res)=>{
 const {email,pass}=req.body
     try{
-        const user=await userModel.findOne({email})
+        const user=await UserModel.findOne({email})
         
         if(user){
             bcrypt.compare(pass, user.pass, (err, result)=> {
